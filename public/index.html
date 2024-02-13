@@ -48,12 +48,14 @@
         id="text"
       ></textarea
       ><br />
-      <!-- TODO: Button should be disabled until the logs, if any, are displayed and there's text in the textarea -->
       <button type="submit" data-cy="add_log_btn" id="button">Add Log</button>
-      <!-- TODO: Button should AJAX PUT the textarea value to json-server which will store it -->
     </div>
     </form>
-    <script src="script.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>window.jQuery || document.write('<script src="jquery-3.7.1.js"><\/script>')</script>
+    
+    
+    
   </body>
   <!-- TODO: add appropriate comments you feel are necessary, if any, for the next coder to understand -->
 </html>
@@ -76,5 +78,7 @@
       <!-- Use your own unique URL you recorded, not the sample one above. -->
   <!-- You must replace them with dynamic data by ajaxing GET https://json-server-ft3qa5--3000.local.webcontainer.io/logs?courseId=<courseID>&uvuId=<uvuID> -->
   <!-- DONE: When character length reaches 8 and it's only digits, fire off ajax request, if 200 or 304, display results, else appropriately guide the user. -->
+   <!-- TODO: Button should be disabled until the logs, if any, are displayed and there's text in the textarea -->
    <!-- DONE: Click anywhere on the log to toggle visibility of the log (text only, not the date) -->
+   <!-- TODO: Button should AJAX PUT the textarea value to json-server which will store it -->
 <!-- DONE: Load the CSS file -->
