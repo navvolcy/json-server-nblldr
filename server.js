@@ -12,12 +12,13 @@ const port = 3000
 app.use(logger('dev'))
 app.use(helmet())
 
-//serving static files in express is type of middleware to serve 
+//serving static files in express is type of middleware that is built in
 app.use(express.static('public'))
 
-app.get('/',(req, res)=>{
-    res.send('Hello world!')
-})
+//Mounts the specified middleware function or functions at the specified path: 
+//the middleware function is executed when the base of the requested path matches path.
+
+
 app.get('*',(req,res)=>{
     res.sendFile(__dirname +'/public/404.html')
     console.log(__dirname, '/public/404.html')
