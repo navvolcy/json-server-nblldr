@@ -1,7 +1,7 @@
 54// AJAX to replace them with dynamic data from GET https://json-server-ft3qa5--3000.local.webcontainer.io/api/v1/courses 
 //https://jsonservernblldr-ufml--3000--f7aa08df.local-credentialless.webcontainer.io/api/v1/courses
 //http://localhost:3000/courses'
-fetch('../courses')
+fetch('/api/v1/courses')
   .then(res => res.json())
   .then(data => {
     for (const options in data){
@@ -42,8 +42,8 @@ function handleOnChange() {
       listContainer.removeChild(child);
       child = listContainer.lastElementChild;
     }
-    fetch(//https://jsonserverbezxrx-sfe1--3000--33975f1d.local-credentialless.webcontainer.io/api/v1/logs
-      '../logs'
+    fetch(//https://jsonserverbezxrx-sfe1--3000--33975f1d.local-credentialless.webcontainer.io/api/v1/logs ///uvuId/:uvuId/courses/:courses
+      '/api/v1/logs'
     )
       .then((response) => {
         return response.json();

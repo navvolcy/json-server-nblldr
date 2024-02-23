@@ -25,21 +25,22 @@ app.use(
 app.use(express.static('public'))
 
 app.get('/api/v1/courses',(req, res)=> {
-    const display = req.query.display
-    const courses = db.courses.filter(course => course.display === display)
-    //const courses = db.courses
-
+   
+    const courses = db.courses
     res.send(courses)
 })
 
 app.get('/api/v1/logs',(req,res)=> {
-    const courseId = req.query.courseId
-    const uvuId = req.query.uvuId
-    const logs = db.logs
-        .filter(log => log.courseId === courseId)
-        .filter(log => log.uvuId === uvuId);
+  // const courseId = req.query.courseId
+  // const uvuId = req.query.uvuId
+  // const logs = db.logs
+  // .filter(log => log.courseId === courseId)
+  // .filter(log => log.uvuId === uvuId)
+  // console.log(logs, "the logs")
+  // console.log(uvuId,"id")
+  // console.log(courseId,"courses")
 
-    res.send(logs)
+    res.send(db.logs)
 })
 
 app.get('*',(req,res)=>{
@@ -50,3 +51,5 @@ app.get('*',(req,res)=>{
 app.listen(port, () =>{
     console.log(`Example app listening on port ${port}`)
 })
+
+
