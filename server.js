@@ -30,17 +30,12 @@ app.get('/api/v1/courses',(req, res)=> {
     res.send(courses)
 })
 
-app.get('/api/v1/logs',(req,res)=> {
-  // const courseId = req.query.courseId
-  // const uvuId = req.query.uvuId
-  // const logs = db.logs
-  // .filter(log => log.courseId === courseId)
-  // .filter(log => log.uvuId === uvuId)
-  // console.log(logs, "the logs")
-  // console.log(uvuId,"id")
-  // console.log(courseId,"courses")
+app.get('/api/v1/logs/uvuId',(req,res)=> { //1. filter the student ID and course ID  2. send back the student id with the text and date to the client and 
+  const logs = db.logs
 
-    res.send(db.logs)
+  
+  
+    res.send(logs)
 })
 
 app.get('*',(req,res)=>{

@@ -43,7 +43,7 @@ function handleOnChange() {
       child = listContainer.lastElementChild;
     }
     fetch(//https://jsonserverbezxrx-sfe1--3000--33975f1d.local-credentialless.webcontainer.io/api/v1/logs ///uvuId/:uvuId/courses/:courses
-      '/api/v1/logs'
+      '/api/v1/logs/uvuId'
     )
       .then((response) => {
         return response.json();
