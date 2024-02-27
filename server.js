@@ -12,6 +12,7 @@ const { networkInterfaces } = require('os');
 //The next middleware function is commonly denoted by a variable named next.
 
 app.use(logger('dev'))
+
 app.use(
     helmet({
       contentSecurityPolicy: {
@@ -27,30 +28,22 @@ app.use(
 app.use(express.static('public'))
 //setting up endpoints
 app.get('/api/v1/courses',(req, res)=> {
+   
     const courses = db.courses
     res.send(courses)
 })
 
-
 app.get('/api/v1/logs/:uvuId/:courseId',(req,res)=> {
-     const uvuId = req.params.uvuId
-     const courseId = req.params.courseId
-     const logs = db.logs
+    const courseId = req.params.courseId
+    const uvuId = req.params.uvuId
+    const logs = db.logs
         .filter(log => log.courseId === courseId)
         .filter(log => log.uvuId === uvuId)
-        .map(log => [log.uvuId, log.date, log.text])
-
-
-       
-
-        console.log(courseId,'course')
-        console.log(uvuId,"ID")
-        console.log(logs,"logs")
-
+        .map(function (log) {
+          return [log.uvuId,log.date,log.text]})
 
     res.send(logs)
 })
-
 
 app.get('*',(req,res)=>{
     res.sendFile(__dirname +'/public/404.html')
@@ -66,16 +59,3 @@ app.post('/api/vi/logs',(req,res)=>{
 app.listen(port, () =>{
    // console.log(`Listening  on ${chalk.blue(`http://${ip}:${port}`)}`)
 })
-function gracefulShutdown(signal) {
-    //save db to disk 
-    console.log(`\n${signal} signal received: closing HTTP server`)
-    Server.close(()=>{
-        console.log('HTTP server is closed')
-    });
-}
-
-process.on('SIGHUP', gracefulShutdown)
-process.on('SIGTERM', gracefulShutdown)
-process.on('SIGINT', gracefulShutdown)
-process.on('SIGBREAK', gracefulShutdown)
-
