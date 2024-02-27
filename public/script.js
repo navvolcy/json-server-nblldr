@@ -133,7 +133,7 @@ function disableButton() {
       let currentDate = date.toISOString().substring(0,10);
 
       const dbJson = {
-        courseId: document.querySelector("option").value,
+        courseId: document.querySelector("select").value,
         uvuId: document.querySelector("input").value,
         date: currentDate,
         text: document.querySelector("textarea").value
