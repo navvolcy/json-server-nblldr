@@ -1,7 +1,7 @@
 54// AJAX to replace them with dynamic data from GET https://json-server-ft3qa5--3000.local.webcontainer.io/api/v1/courses 
 //https://jsonservernblldr-ufml--3000--f7aa08df.local-credentialless.webcontainer.io/api/v1/courses
 //http://localhost:3000/courses'
-fetch('../courses')
+fetch('/api/v1/courses')
   .then(res => res.json())
   .then(data => {
     for (const options in data){
@@ -11,6 +11,7 @@ fetch('../courses')
       let option = document.createElement("option");
       
       option.setAttribute('value', data[options].id);
+      
 
       let optionText = document.createTextNode(data[options].display);
       
@@ -33,6 +34,7 @@ document.getElementById('uvuId').addEventListener('input', handleOnChange);
 //let isPopulated = false;
 function handleOnChange() {
   let str = document.getElementById('uvuId').value;
+  let cor = document.getElementById('course').value
   //the str must be length 8 put up the log from server
   if (str.length === 8) {
     let listContainer = document.getElementById('unOrdered');
@@ -42,18 +44,22 @@ function handleOnChange() {
       listContainer.removeChild(child);
       child = listContainer.lastElementChild;
     }
-    fetch(//https://jsonserverbezxrx-sfe1--3000--33975f1d.local-credentialless.webcontainer.io/api/v1/logs
-      '../logs'
+    fetch(
+      `/api/v1/logs/${str}/${cor}`
     )
       .then((response) => {
         return response.json();
       })
-      .then((data) => {
-        for (const student in data) {
-          if (str === data[student].uvuId) {
+      .then((logs) => {
+        console.log(logs, 'data')
+        for (const log of logs) {
+          let uvuId = log[0]
+          let date = log[1]
+          let text = log[2]
+          
            
             var mainContainer = document.getElementById('uvuIdDisplay');
-            mainContainer.innerHTML = 'Student Logs for ' + data[student].uvuId;
+            mainContainer.innerHTML = 'Student Logs for ' + uvuId;
             // creating html tags
             var listContainer = document.getElementById('unOrdered');
 
@@ -75,11 +81,11 @@ function handleOnChange() {
               .appendChild(pTag);
             //date info displayed 
             //text info displayed
-            studentInfo.innerHTML = data[student].date;
-            studentText.innerHTML = data[student].text;
-            console.log('reached then()', data[student].date);
-            console.log('dates reached ', data[student].text);
-          }        
+            studentInfo.innerHTML = date;
+            studentText.innerHTML = text;
+            console.log('reached then()', logs[log].date);
+            console.log('dates reached ', logs[log].text);
+                 
         }
       })
       .catch((err) => {
@@ -138,7 +144,7 @@ function disableButton() {
         body:JSON.stringify(dbJson)
       }
       
-      fetch('../logs', requestOptions)
+      fetch('api/v1/logs', requestOptions)
       .then(response => response.json())
       .then(data => console.log("testing", data))
       .catch(err => console.log("log error", err))
