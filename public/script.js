@@ -36,7 +36,7 @@ function handleOnChange() {
   let str = document.getElementById('uvuId').value;
   let cor = document.getElementById('course').value
   //the str must be length 8 put up the log from server
-  
+  if (str.length === 8){
     let listContainer = document.getElementById('unOrdered');
      
     let child = listContainer.lastElementChild;
@@ -91,7 +91,7 @@ function handleOnChange() {
       .catch((err) => {
         console.log('error1 ', err);
       });
-  
+    }
 }
 
 const logs = document.getElementById("unOrdered");

@@ -6,6 +6,7 @@ const app = express()
 const port = 3000
 //import chalk from 'chalk';
 const { networkInterfaces } = require('os');
+const { Server } = require('http')
 
 //Middleware functions are functions that have access to the request object (req), 
 //the response object (res), and the next middleware function in the application’s request-response cycle. 
@@ -59,3 +60,16 @@ app.post('/api/vi/logs',(req,res)=>{
 app.listen(port, () =>{
    // console.log(`Listening  on ${chalk.blue(`http://${ip}:${port}`)}`)
 })
+
+function gracefulShutdown(signal){
+  //save db to disk
+  console.log(`\n${signal} signal received: closing HTTP server`)
+  Server.close(()=>{
+    console.log('HTTP server is closed')
+  });
+}
+
+process.on('SIGINT', gracefulShutdown)
+process.on('SIGTERM', gracefulShutdown)
+process.on('SIGUP', gracefulShutdown)
+process.on('SIGBREAK', gracefulShutdown)
