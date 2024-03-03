@@ -1,6 +1,5 @@
-54// AJAX to replace them with dynamic data from GET https://json-server-ft3qa5--3000.local.webcontainer.io/api/v1/courses 
-//https://jsonservernblldr-ufml--3000--f7aa08df.local-credentialless.webcontainer.io/api/v1/courses
-//http://localhost:3000/courses'
+
+"use strict";
 fetch('/api/v1/courses')
   .then(res => res.json())
   .then(data => {
@@ -51,6 +50,7 @@ function handleOnChange() {
         return response.json();
       })
       .then((logs) => {
+        console.log (cor,"uvuid")
         console.log(logs, 'data')
         for (const log of logs) {
           let uvuId = log[0]
@@ -83,8 +83,8 @@ function handleOnChange() {
             //text info displayed
             studentInfo.innerHTML = date;
             studentText.innerHTML = text;
-            console.log('reached then()', logs[log].date);
-            console.log('dates reached ', logs[log].text);
+            console.log('reached then()', date);
+            console.log('dates reached ', text);
                  
         }
       })
@@ -113,7 +113,7 @@ document.querySelector('#button').disabled = true;
 document.querySelector('textarea').addEventListener("input", disableButton);
 
 function disableButton() {
-  const txtArea = document.getElementById('text');
+  let txtArea = document.getElementById('text');
   const button = document.getElementById('button');
   const unOrder = document.getElementById('unOrdered');
   console.log("txtfunc");
@@ -131,19 +131,29 @@ function disableButton() {
     if(txt.endsWith('.')){
       const date = new Date();
       let currentDate = date.toISOString().substring(0,10);
+      function createRandomString(length) {
+        const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        let result = "";
+        for (let i = 0; i < length; i++) {
+          result += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        return result;
+      }    
+      console.log(". reached")
 
       const dbJson = {
         courseId: document.querySelector("select").value,
         uvuId: document.querySelector("input").value,
         date: currentDate,
-        text: document.querySelector("textarea").value
+        text: document.querySelector("textarea").value,
+        id: createRandomString(8)
       }
       const requestOptions = {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body:JSON.stringify(dbJson)
       }
-      
+      console.log(requestOptions,"fetch me")
       fetch('api/v1/logs', requestOptions)
       .then(response => response.json())
       .then(data => console.log("testing", data))

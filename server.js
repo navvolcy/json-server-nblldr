@@ -1,12 +1,16 @@
 const express  = require('express')
-let logger = require('morgan')
-let helmet = require('helmet')
+const logger = require('morgan')
+const helmet = require('helmet')
 let db = require('./db.json')
+const {writeFile} = require('fs')
+const bodyParser = require('body-parser')
+
 const app = express()
 const port = 3000
 //import chalk from 'chalk';
-const { networkInterfaces } = require('os');
-const { Server } = require('http')
+
+
+
 
 //Middleware functions are functions that have access to the request object (req), 
 //the response object (res), and the next middleware function in the application’s request-response cycle. 
@@ -27,6 +31,12 @@ app.use(
 
 //serving static files 
 app.use(express.static('public'))
+
+app.use(bodyParser.urlencoded({ extended: false }))
+
+// parse application/json
+app.use(bodyParser.json())
+
 //setting up endpoints
 app.get('/api/v1/courses',(req, res)=> {
    
@@ -41,22 +51,39 @@ app.get('/api/v1/logs/:uvuId/:courseId',(req,res)=> {
         .filter(log => log.courseId === courseId)
         .filter(log => log.uvuId === uvuId)
         .map(function (log) {
-          return [log.uvuId,log.date,log.text]})
+          return [log.uvuId, log.date, log.text]})
+          console.log(uvuId)
+
+    console.log(logs ,'here1')
 
     res.send(logs)
 })
 
+
+ app.post('/api/v1/logs',(req,res)=>{
+
+  let updatedLogs = db.logs
+  updatedLogs.push(req.body)
+  writeFile('./db.json', JSON.stringify({...db,logs:updatedLogs}, null, 2), (error) => {
+    
+    if (error) {
+      console.log('An error has occurred ', error);
+      return;
+    }
+    console.log('Data written successfully to disk');
+  });
+  
+  
+  console.log('post /api/vi/logs', db.logs) 
+
+  
+})
+
 app.get('*',(req,res)=>{
-    res.sendFile(__dirname +'/public/404.html')
-    console.log(__dirname, '/public/404.html')
+  res.sendFile(__dirname +'/public/404.html')
+  console.log(__dirname, '/public/404.html')
 })
 
-app.post('/api/vi/logs',(req,res)=>{
-    
-
-    
-    res.send(db.logs)
-})
 app.listen(port, () =>{
    // console.log(`Listening  on ${chalk.blue(`http://${ip}:${port}`)}`)
 })
