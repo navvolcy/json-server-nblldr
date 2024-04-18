@@ -22,6 +22,7 @@ fetch('/api/v1/courses')
 //If course ever becomes unselected, don't show the uvu id text input box
 const selectElement = document.querySelector("#course");
 selectElement.addEventListener("change", (event) => {
+  let uvu;
   uvu = document.getElementById("studentID");
   uvu.style.display = event.target.value === ""? "none" : "block";
 })
@@ -161,7 +162,6 @@ function disableButton() {
     }
   } 
 }
-
 
 
 
