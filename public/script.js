@@ -1,4 +1,5 @@
 "use strict";
+
 fetch('/api/v1/courses')
   .then(res => res.json())
   .then(data => {

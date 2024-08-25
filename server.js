@@ -23,7 +23,7 @@ app.use(
         },
       },
     })
-);
+  );
 //serving static files in express is type of middleware that is built in
 app.use(express.static('public'))
 
@@ -38,15 +38,15 @@ app.get('/api/v1/courses',(req, res)=> {
     res.send(courses)
 })
 
-app.get('/api/v1/logs/:uvuId/:courseId',(req,res)=> { //1. filter the student ID and course ID  2. send back the student id with the text and date to the client and 
+app.get('/api/v1/logs/:uvuId/:courseId',(req,res)=> {
   const courseId = req.params.courseId
   const uvuId = req.params.uvuId
   const logs = db.logs
   .filter(log => log.courseId === courseId)
   .filter(log => log.uvuId === uvuId)
   .map(log => {return [log.uvuId, log.date, log.text]})
-
-  res.send(logs)
+  
+    res.send(logs)
 })
 
 app.post('/api/v1/logs',(req,res)=>{
@@ -69,12 +69,23 @@ app.post('/api/v1/logs',(req,res)=>{
 })
 
 app.get('*',(req,res)=>{
-    res.sendFile(__dirname +'/public/404.html')
-    console.log(__dirname, '/public/404.html')
+  res.sendFile(__dirname +'/public/404.html')
+  console.log(__dirname, '/public/404.html')
 })
 
 app.listen(port, () =>{
-    console.log(`Example app listening on port ${port}`)
+   //console.log(`Listening  on ${chalk.blue(`http://${ip}:${port}`)}`)
 })
 
+function gracefulShutdown(signal){
+  //save db to disk
+  console.log(`\n${signal} signal received: closing HTTP server`)
+  Server.close(()=>{
+    console.log('HTTP server is closed')
+  });
+}
 
+process.on('SIGINT', gracefulShutdown)
+process.on('SIGTERM', gracefulShutdown)
+process.on('SIGUP', gracefulShutdown)
+process.on('SIGBREAK', gracefulShutdown)
