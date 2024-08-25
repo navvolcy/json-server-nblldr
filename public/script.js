@@ -1,6 +1,4 @@
-54// AJAX to replace them with dynamic data from GET https://json-server-ft3qa5--3000.local.webcontainer.io/api/v1/courses 
-//https://jsonservernblldr-ufml--3000--f7aa08df.local-credentialless.webcontainer.io/api/v1/courses
-//http://localhost:3000/courses'
+"use strict";
 fetch('/api/v1/courses')
   .then(res => res.json())
   .then(data => {
@@ -11,6 +9,7 @@ fetch('/api/v1/courses')
       let option = document.createElement("option");
       
       option.setAttribute('value', data[options].id);
+      
 
       let optionText = document.createTextNode(data[options].display);
       
@@ -22,19 +21,19 @@ fetch('/api/v1/courses')
 //If course ever becomes unselected, don't show the uvu id text input box
 const selectElement = document.querySelector("#course");
 selectElement.addEventListener("change", (event) => {
-  uvu = document.getElementById("studentID");
+ const  uvu = document.getElementById("studentID");
   uvu.style.display = event.target.value === ""? "none" : "block";
 })
 
-//replace them with dynamic data by ajaxing GET https://json-server-ft3qa5--3000.local.webcontainer.io/logs?courseId=<courseID>&uvuId=<uvuID>
 
 document.getElementById('uvuId').addEventListener('input', handleOnChange);
 
 //let isPopulated = false;
 function handleOnChange() {
   let str = document.getElementById('uvuId').value;
+  let cor = document.getElementById('course').value
   //the str must be length 8 put up the log from server
-  if (str.length === 8) {
+  if (str.length === 8){
     let listContainer = document.getElementById('unOrdered');
      
     let child = listContainer.lastElementChild;
@@ -42,18 +41,23 @@ function handleOnChange() {
       listContainer.removeChild(child);
       child = listContainer.lastElementChild;
     }
-    fetch(//https://jsonserverbezxrx-sfe1--3000--33975f1d.local-credentialless.webcontainer.io/api/v1/logs ///uvuId/:uvuId/courses/:courses
-      '/api/v1/logs/uvuId'
+    fetch(
+      `/api/v1/logs/${str}/${cor}`
     )
       .then((response) => {
         return response.json();
       })
-      .then((data) => {
-        for (const student in data) {
-          if (str === data[student].uvuId) {
+      .then((logs) => {
+        console.log (cor,"uvuid")
+        console.log(logs, 'data')
+        for (const log of logs) {
+          let uvuId = log[0]
+          let date = log[1]
+          let text = log[2]
+          
            
             var mainContainer = document.getElementById('uvuIdDisplay');
-            mainContainer.innerHTML = 'Student Logs for ' + data[student].uvuId;
+            mainContainer.innerHTML = 'Student Logs for ' + uvuId;
             // creating html tags
             var listContainer = document.getElementById('unOrdered');
 
@@ -75,17 +79,17 @@ function handleOnChange() {
               .appendChild(pTag);
             //date info displayed 
             //text info displayed
-            studentInfo.innerHTML = data[student].date;
-            studentText.innerHTML = data[student].text;
-            console.log('reached then()', data[student].date);
-            console.log('dates reached ', data[student].text);
-          }        
+            studentInfo.innerHTML = date;
+            studentText.innerHTML = text;
+            console.log('reached then()', date);
+            console.log('dates reached ', text);
+                 
         }
       })
       .catch((err) => {
         console.log('error1 ', err);
       });
-  }
+    }
 }
 
 const logs = document.getElementById("unOrdered");
@@ -107,7 +111,7 @@ document.querySelector('#button').disabled = true;
 document.querySelector('textarea').addEventListener("input", disableButton);
 
 function disableButton() {
-  const txtArea = document.getElementById('text');
+  let txtArea = document.getElementById('text');
   const button = document.getElementById('button');
   const unOrder = document.getElementById('unOrdered');
   console.log("txtfunc");
@@ -125,31 +129,33 @@ function disableButton() {
     if(txt.endsWith('.')){
       const date = new Date();
       let currentDate = date.toISOString().substring(0,10);
+      function createRandomString(length) {
+        const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        let result = "";
+        for (let i = 0; i < length; i++) {
+          result += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        return result;
+      }    
+      console.log(". reached")
 
       const dbJson = {
-        courseId: document.querySelector("option").value,
+        courseId: document.querySelector("select").value,
         uvuId: document.querySelector("input").value,
         date: currentDate,
-        text: document.querySelector("textarea").value
+        text: document.querySelector("textarea").value,
+        id: createRandomString(8)
       }
       const requestOptions = {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body:JSON.stringify(dbJson)
       }
-      
-      fetch('../logs', requestOptions)
+      console.log(requestOptions,"fetch me")
+      fetch('api/v1/logs', requestOptions)
       .then(response => response.json())
       .then(data => console.log("testing", data))
       .catch(err => console.log("log error", err))
     }
   } 
 }
-
-
-
-
-
-
-
-
