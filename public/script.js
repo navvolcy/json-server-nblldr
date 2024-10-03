@@ -22,11 +22,11 @@ fetch('/api/v1/courses')
 //If course ever becomes unselected, don't show the uvu id text input box
 const selectElement = document.querySelector("#course");
 selectElement.addEventListener("change", (event) => {
-  uvu = document.getElementById("studentID");
+ let uvu = document.getElementById("studentID");
   uvu.style.display = event.target.value === ""? "none" : "block";
 })
 
-//replace them with dynamic data by ajaxing GET https://json-server-ft3qa5--3000.local.webcontainer.io/logs?courseId=<courseID>&uvuId=<uvuID>
+
 
 document.getElementById('uvuId').addEventListener('input', handleOnChange);
 
@@ -111,6 +111,8 @@ function logItem() {
 
 document.querySelector('#button').disabled = true;
 document.querySelector('textarea').addEventListener("input", disableButton);
+
+// the button is disabled until the text ends with a '.'
 
 function disableButton() {
   let txtArea = document.getElementById('text');

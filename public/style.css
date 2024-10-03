@@ -1,14 +1,16 @@
 /* TODO: make it look awesome. */
 /* TODO: make it responsive. */
 body{
-    margin: 0;
-      padding: 0;
-      display: flex;
-      justify-content: center;
-      /* align-items: center; */
-      /* min-height: 100vh; */
-      font-family: 'Jost', sans-serif;
-      background: linear-gradient(to bottom, #275D38,  #275D38,  #275D38);
+
+  margin: 0;
+  padding: 0;
+  display:flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Jost', sans-serif;
+  background-color: rgb(36, 93, 56)
+     
 }
 
 textarea {
@@ -32,39 +34,26 @@ button{
       border-radius: 5px;
       transition: .2s ease-in;
       cursor: pointer;
+      
 }
 
 select {
-    margin: 10px 120px;
-    border: 0;
-    outline: 0;
-    font: inherit;
-    width: 20em;
-    height: 3em;
-    padding: 0 4em 0 1em;
-    background: var(--arrow-icon) no-repeat right 0.8em center / 1.4em,
-      linear-gradient(to left, var(--arrow-bg) 3em, var(--select-bg) 3em);
-    color: black;
-    border-radius: 0.25em;
-    box-shadow: 0 0 1em 0 rgba(0, 0, 0, 0.2);
-    cursor: pointer;
-    &::-ms-expand {
-      display: none;
-    }
-    &:focus {
-      outline: none;
-    }
-    option {
-      color: black;
-      background-color: black;
-    }
-  
-  
+  margin: 10px 120px;
+  outline: 0;
+  font: Arial ;
+  width: 20em;
+  height: 3em;
+  padding: 0 4em 0 1em;
+  color: black;
+  border-radius: 0.25em;
+  box-shadow: 0 0 1em 0 rgba(0, 0, 0, 0.2);
+  cursor: pointer;
 }
 
 textarea {
   width: 60%;
   margin: 10px 120px;
+  height: 3em;
 }
 
 label{

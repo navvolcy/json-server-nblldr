@@ -23,7 +23,8 @@ app.use(
       contentSecurityPolicy: {
         directives: {
           "script-src": ["'self'", "example.com"],
-          "img-src":["self", "https://cdn.sstatic.net/Sites/stackoverflow/Img/favicon.ico"]
+          "img-src": null,
+          "img-src": null
         },
       },
     })
