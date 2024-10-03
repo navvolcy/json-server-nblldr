@@ -42,9 +42,7 @@
       <h3 id="uvuIdDisplay" data-cy="uvuIdDisplay">
        
       </h3>
-      <ul data-cy="logs" id="unOrdered">
-        <!-- TODO: Click anywhere on the log to toggle visibility of the log (text only, not the date) -->
-       
+      <ul data-cy="logs" id="unOrdered"> 
       </ul>
       <label>New Log</label><br />
       <textarea
@@ -54,9 +52,7 @@
         id="text"
       ></textarea
       ><br />
-      <!-- TODO: Button should be disabled until the logs, if any, are displayed and there's text in the textarea -->
       <button type="submit" data-cy="add_log_btn" id="button">Add Log</button>
-      <!-- TODO: Button should AJAX PUT the textarea value to json-server which will store it -->
     </div>
     </form>
     <script src="script.js"></script>
@@ -83,4 +79,7 @@
   <!-- You must replace them with dynamic data by ajaxing GET https://json-server-ft3qa5--3000.local.webcontainer.io/logs?courseId=<courseID>&uvuId=<uvuID> -->
   <!-- DONE: When character length reaches 8 and it's only digits, fire off ajax request, if 200 or 304, display results, else appropriately guide the user. -->
    <!-- DONE: Click anywhere on the log to toggle visibility of the log (text only, not the date) -->
+    <!-- DONE: Button should be disabled until the logs, if any, are displayed and there's text in the textarea -->
+     <!--DONE: Button should AJAX PUT the textarea value to json-server which will store it -->
+     <!--DONE: Click anywhere on the log to toggle visibility of the log (text only, not the date) -->
 <!-- DONE: Load the CSS file -->

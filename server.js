@@ -1,16 +1,12 @@
 const express  = require('express')
-const logger = require('morgan')
-const helmet = require('helmet')
+let logger = require('morgan')
+let helmet = require('helmet')
 let db = require('./db.json')
-const {writeFile} = require('fs')
+const {writeFile} = require('fs-extra')
 const bodyParser = require('body-parser')
 
 const app = express()
 const port = 3000
-//import chalk from 'chalk';
-
-
-
 
 //Middleware functions are functions that have access to the request object (req), 
 //the response object (res), and the next middleware function in the application’s request-response cycle. 
@@ -29,8 +25,7 @@ app.use(
       },
     })
   );
-
-//serving static files 
+//serving static files in express is type of middleware that is built in
 app.use(express.static('public'))
 
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -38,7 +33,6 @@ app.use(bodyParser.urlencoded({ extended: false }))
 // parse application/json
 app.use(bodyParser.json())
 
-//setting up endpoints
 app.get('/api/v1/courses',(req, res)=> {
    
     const courses = db.courses
@@ -46,22 +40,17 @@ app.get('/api/v1/courses',(req, res)=> {
 })
 
 app.get('/api/v1/logs/:uvuId/:courseId',(req,res)=> {
-    const courseId = req.params.courseId
-    const uvuId = req.params.uvuId
-    const logs = db.logs
-        .filter(log => log.courseId === courseId)
-        .filter(log => log.uvuId === uvuId)
-        .map(function (log) {
-          return [log.uvuId, log.date, log.text]})
-          console.log(uvuId)
-
-    console.log(logs ,'here1')
-
+  const courseId = req.params.courseId
+  const uvuId = req.params.uvuId
+  const logs = db.logs
+  .filter(log => log.courseId === courseId)
+  .filter(log => log.uvuId === uvuId)
+  .map(log => {return [log.uvuId, log.date, log.text]})
+  
     res.send(logs)
 })
 
-
- app.post('/api/v1/logs',(req,res)=>{
+app.post('/api/v1/logs',(req,res)=>{
 
   let updatedLogs = db.logs
   updatedLogs.push(req.body)
@@ -86,7 +75,7 @@ app.get('*',(req,res)=>{
 })
 
 app.listen(port, () =>{
-   // console.log(`Listening  on ${chalk.blue(`http://${ip}:${port}`)}`)
+   //console.log(`Listening  on ${chalk.blue(`http://${ip}:${port}`)}`)
 })
 
 function gracefulShutdown(signal){
