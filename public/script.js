@@ -132,7 +132,7 @@ function disableButton() {
     let txt = document.querySelector('textarea').value;
     if(txt.endsWith('.')){
       const date = new Date();
-      let currentDate = date.toISOString().substring(0,10);
+      let currentDate = date.toLocaleString();
       function createRandomString(length) {
         const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         let result = "";
