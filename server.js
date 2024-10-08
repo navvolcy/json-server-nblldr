@@ -62,11 +62,9 @@ app.post('/api/v1/logs',(req,res)=>{
     }
     console.log('Data written successfully to disk');
   });
-  
-  
+   
   console.log('post /api/vi/logs', db.logs) 
 
-  
 })
 
 app.get('*',(req,res)=>{
