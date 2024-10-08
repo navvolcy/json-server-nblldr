@@ -123,43 +123,37 @@ function disableButton() {
     console.log('textArea');
     button.disabled = true;
     //button.reset();
-    console.log("disable");
+    console.log("button is disable");
     //document.getElementById("form1").reset();
   } else { // display is not empty button is active and 
-    console.log('false');
-    button.disabled = false;
-    //Button should AJAX PUT the textarea value to json-server which will store it
-    let txt = document.querySelector('textarea').value;
-    if(txt.endsWith('.')){
+    console.log('textarea is not empty & button is not disabled');
+    button.disabled = false;  
+  } 
+}
+
+document.getElementById("button").addEventListener("click", newLogs);
+
+function newLogs(event){
+
       const date = new Date();
       let currentDate = date.toLocaleString();
-      function createRandomString(length) {
-        const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-        let result = "";
-        for (let i = 0; i < length; i++) {
-          result += chars.charAt(Math.floor(Math.random() * chars.length));
-        }
-        return result;
-      }    
-      console.log(". reached")
-
       const dbJson = {
         courseId: document.querySelector("select").value,
         uvuId: document.querySelector("input").value,
         date: currentDate,
-        text: document.querySelector("textarea").value,
-        id: createRandomString(8)
+        text: document.querySelector("textarea").value
       }
       const requestOptions = {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body:JSON.stringify(dbJson)
       }
-      console.log(requestOptions,"fetch me")
+      
       fetch('api/v1/logs', requestOptions)
       .then(response => response.json())
       .then(data => console.log("testing", data))
       .catch(err => console.log("log error", err))
-    }
-  } 
+      event.preventDefault();
 }
+
+
