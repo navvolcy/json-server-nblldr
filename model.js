@@ -3,31 +3,13 @@
 const mongoose = require('mongoose')
 
 // Course Modal Schema 
-const cs3380 = new mongoose.Schema({ 
-    _id: Number, 
+const logs = new mongoose.Schema({
+    _id: Number,
     courseId: String,
     uvuId: String,
     date: String,
-    text: String, 
-    id: String 
-}); 
-
-const cs4660 = new mongoose.Schema({
-    _id: Number, 
-    courseId: String,
-    uvuId: String,
-    date: String,
-    text: String, 
-    id: String 
-})
-
-const cs4690 = new mongoose.Schema({
-    _id: Number, 
-    courseId: String,
-    uvuId: String,
-    date: String,
-    text: String, 
-    id: String 
+    text: String,
+    id: String
 })
 
 const courses = new mongoose.Schema({
@@ -37,13 +19,11 @@ const courses = new mongoose.Schema({
 })
 
 
-// Creating model objects 
-const CS3380 = mongoose.model('cs3380', cs3380); 
-const CS4660 = mongoose.model('cs4660', cs4660); 
-const CS4690 = mongoose.model('cs4690', cs4690); 
+// Creating model objects  
+const LOGS = mongoose.model('logs', logs); 
 const COURSES = mongoose.model('courses', courses);
 
 // Exporting our model objects 
 module.exports = { 
-    CS3380, CS4660, CS4690, COURSES
+    LOGS, COURSES
 }

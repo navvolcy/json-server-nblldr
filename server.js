@@ -1,12 +1,14 @@
-const express = require("express");
+ const express = require("express");
 const logger = require("morgan");
 const helmet = require("helmet");
 const mongoose = require("mongoose");
-let db = require("./db.json");
-const { CS3380, CS4660, CS4690, COURSES } = require("./model");
+// let db = require("./db.json");
+const { CS3380, CS4660, COURSES, LOGS } = require("./model");
 const bodyParser = require("body-parser");
-const uri =
-  "mongodb+srv://navvolcy:21296Vpu01@cluster0.0h4wite.mongodb.net/uvu_classes?retryWrites=true&w=majority&appName=Cluster0";
+const { MongoClient } = require("mongodb");
+const { filter } = require("ldapjs");
+const { ur } = require("@faker-js/faker");
+const uri = "mongodb+srv://navvolcy:21296Vpu01@cluster0.0h4wite.mongodb.net/uvu_classes?retryWrites=true&w=majority&appName=Cluster0";
 const app = express();
 const port = 3000;
 //import chalk from 'chalk';
@@ -21,10 +23,7 @@ app.use(
     contentSecurityPolicy: {
       directives: {
         "script-src": ["'self'", "example.com"],
-        "img-src": [
-          "self",
-          "https://cdn.sstatic.net/Sites/stackoverflow/Img/favicon.ico",
-        ],
+        "img-src": null,
       },
     },
   })
@@ -41,34 +40,22 @@ app.use(bodyParser.json());
 mongoose.set("strictQuery", false);
 let mongodb;
 
+
 //empty Array to store docs from mongodb collections
 let dbcourses = [];
 let courses = [];
-//connecting to db
-//query db
 async function main() {
   mongodb = await mongoose.connect(uri);
+  
+  console.log("Pinged your deployment. You successfully connected to MongoDB!", );
   console.log("connected");
-}
-main()
+}  
+
+//connecting to db
+//query db
+  main()
   .then(() => {
-    CS3380.find({})
-      .exec()
-      .then((data) => {
-        data.map((course, k) => {
-          dbcourses.push(course);
-        });
-      });
-
-    CS4660.find({})
-      .exec()
-      .then((data) => {
-        data.map((course, k) => {
-          dbcourses.push(course);
-        });
-      });
-
-    CS4690.find({})
+    LOGS.find({})
       .exec()
       .then((data) => {
         data.map((course, k) => {
@@ -91,8 +78,8 @@ main()
 //setting up endpoints
 //get multiple collections
 app.get('/api/v1/courses', (req, res) => {
-console.log("new", db.courses)
-  res.send(db.courses)
+console.log("new", courses)
+  res.send(courses)
 });
 //aggreagate multiple documents from three different collections
 app.get("/api/v1/logs/:uvuId/:courseId", (req, res) => {
@@ -108,9 +95,54 @@ app.get("/api/v1/logs/:uvuId/:courseId", (req, res) => {
   res.send(logs);
 });
 
-app.post("/api/v1/logs", (req, res) => {
-  let updatedLogs = dbcourses;
-  updatedLogs.push(req.body);
+
+//add new courses is the Courses
+app.post("/api/v1/courses", async(req, res) => {
+
+  try{
+    const client = new MongoClient(uri);
+    await client.connect()
+
+    const db = client.db("uvu_classes")
+    const collection = db.collection("courses")
+
+    const {display} = req.body;
+    if (!display){
+      console.log("display: ", display)
+    }
+
+    const result = await collection.insertOne({display});
+    console.log( "reached backend");
+
+    
+    res.send(result)
+  }catch(err){
+    console.error(err);
+    res.status(500).json({message: 'Error inserting data'});
+  }
+
+});
+
+
+app.post("/api/v1/logs",async (req, res) => {
+  try{
+    const client = new MongoClient(uri);
+    await client.connect();
+
+    const db = client.db("uvu_classes")
+    const collection = db.collection("logs")
+
+    const updatedLogs = req.body;
+    //updatedLogs.push(req.body);
+
+    const result = await collection.insertOne(updatedLogs)
+
+    res.status(201).json({ message: 'Data inserted successfully', insertedId: result.insertedId })
+  }catch(err){
+    console.error(err);
+    res.status(500).json({message: 'Error inserting data'});
+  }
+  
   
 });
 

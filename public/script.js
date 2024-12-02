@@ -113,6 +113,7 @@ function logItem() {
 document.querySelector('#button').disabled = true;
 document.querySelector('textarea').addEventListener("input", disableButton);
 
+
 function disableButton() {
   let txtArea = document.getElementById('text');
   const button = document.getElementById('button');
@@ -122,48 +123,107 @@ function disableButton() {
     console.log('textArea');
     button.disabled = true;
     //button.reset();
-    console.log("disable");
+    console.log("button is disable");
     //document.getElementById("form1").reset();
   } else { // display is not empty button is active and 
-    console.log('false');
-    button.disabled = false;
-    //Button should AJAX PUT the textarea value to json-server which will store it
-    let txt = document.querySelector('textarea').value;
-    if(txt.endsWith('.')){
-      const date = new Date();
-      let currentDate = date.toISOString().substring(0,10);
-      function createRandomString(length) {
-        const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-        let result = "";
-        for (let i = 0; i < length; i++) {
-          result += chars.charAt(Math.floor(Math.random() * chars.length));
-        }
-        return result;
-      }    
-      console.log(". reached")
+    console.log('textarea is not empty & button is not disabled');
+    button.disabled = false;  
+  } 
+}
 
+//Post logs
+document.getElementById("button").addEventListener("click", newLogs);
+
+function newLogs(event){
+  event.preventDefault();
+
+      const date = new Date();
+      let currentDate = date.toLocaleString();
       const dbJson = {
         courseId: document.querySelector("select").value,
-        uvuId: document.querySelector("input").value,
+        uvuId: document.getElementById("uvuId").value,
         date: currentDate,
-        text: document.querySelector("textarea").value,
-        id: createRandomString(8)
+        text: document.querySelector("textarea").value
       }
       const requestOptions = {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body:JSON.stringify(dbJson)
       }
-      console.log(requestOptions,"fetch me")
+      
       fetch('api/v1/logs', requestOptions)
-      .then(response => response.json())
-      .then(data => console.log("testing", data))
+      .then(response => 
+        response.json().then(
+          data =>{
+            dbJson._id = data.insertedId
+            console.log("testing", data)
+            //add dbjson log frontend
+            var listContainer = document.getElementById('unOrdered');
+            var childContainer = document.createElement('li');
+            var divContainer = document.createElement('div');
+            var smallTag = document.createElement('small');
+            var preTag = document.createElement('pre');
+            var pTag = document.createElement('p');
+
+            // //date info
+            var studentInfo = listContainer
+              .appendChild(childContainer)
+              .appendChild(divContainer)
+              .appendChild(smallTag);
+            //text info
+            var studentText = childContainer
+              .appendChild(preTag)
+              .appendChild(pTag);
+            //date info displayed 
+            //text info displayed
+            studentInfo.innerHTML = dbJson.date;
+            studentText.innerHTML = dbJson.text;
+          }))
       .catch(err => console.log("log error", err))
-    }
-  } 
 }
 
+//Post Courses
 
+document.getElementById("csBTN").addEventListener("click", PostNewCourse);
+
+
+function PostNewCourse(event) {
+  event.preventDefault();
+  console.log ("New course");
+ 
+  const NewCourse ={
+    display: document.getElementById("newOptionValue").value
+
+  }
+
+  console.log(NewCourse.display)
+
+  // Send POST request to the server
+  fetch('/api/v1/courses', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify(NewCourse)
+  })
+  .then(response => response.json().then(data => {
+    if (data.insertedId){
+    // Update the select element with the new option
+
+    var selection = document.getElementById("course");
+      
+      let option = document.createElement("option");
+      
+      option.setAttribute('value', data.insertedId);
+      
+      let optionText = document.createTextNode(NewCourse.display);
+      option.appendChild(optionText);
+      selection.appendChild(option);
+    }else{
+      console.error("Failed to add option:", data.error);
+    }
+  }))
+
+  .catch(error => console.error("Error adding option:", error));
+};
 
 
 
